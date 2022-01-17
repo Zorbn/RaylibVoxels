@@ -11,10 +11,10 @@ namespace Voxels
             mesh->vertexCount = triangleCount * 3;
             mesh->triangleCount = triangleCount;
 
-            mesh->vertices = (float*)NativeMemory.Alloc((nuint)(mesh->vertexCount * 3 * sizeof(float)));
-            mesh->texcoords = (float*)NativeMemory.Alloc((nuint)(mesh->vertexCount * 2 * sizeof(float)));
-            mesh->normals = (float*)NativeMemory.Alloc((nuint)(mesh->vertexCount * 3 * sizeof(float)));
-            mesh->indices = (ushort*)NativeMemory.Alloc((nuint)(mesh->vertexCount * sizeof(ushort)));
+            mesh->vertices =  (float*)  NativeMemory.Alloc((nuint)(mesh->vertexCount * 3 * sizeof(float)));
+            mesh->texcoords = (float*)  NativeMemory.Alloc((nuint)(mesh->vertexCount * 2 * sizeof(float)));
+            mesh->normals =   (float*)  NativeMemory.Alloc((nuint)(mesh->vertexCount * 3 * sizeof(float)));
+            mesh->indices =   (ushort*) NativeMemory.Alloc((nuint)(mesh->vertexCount * sizeof(ushort)));
         }
 
         public static void AddFVec(List<float> list, Vector3 position)

@@ -9,9 +9,9 @@ namespace Voxels
             Raylib.InitWindow(1280, 720, "Voxels");
             Raylib.SetTargetFPS(165);
 
-            Texture templateTexture = Raylib.LoadTexture("assets/UnwrappedBlock.png");
-            Camera3D cam = new Camera3D(new(5f, 5f, 5f), new(0f, 0f, 0f), new (0f, 1f, 0f), 45f, 0f);
-            Raylib.SetCameraMode(cam, CameraMode.CAMERA_ORBITAL);
+            Texture templateTexture = Raylib.LoadTexture("assets/TemplateBlock.png");
+            Camera3D cam = new Camera3D(new(5f, 0.25f, 5f), new(0f, 0f, 0f), new (0f, 1f, 0f), 45f, 0f);
+            Raylib.SetCameraMode(cam, CameraMode.CAMERA_FIRST_PERSON);
 
             ChunkMesh chunkMesh = new ChunkMesh();
             chunkMesh.UpdateMesh();
@@ -20,9 +20,12 @@ namespace Voxels
 
             while (!Raylib.WindowShouldClose())
             {
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
-                    Raylib.UpdateCamera(&cam);
+                // Update
+                // float frameTime = Raylib.GetFrameTime();
 
+                Raylib.UpdateCamera(&cam);
+
+                // Draw
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Raylib.RAYWHITE);
 
