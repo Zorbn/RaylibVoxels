@@ -6,53 +6,40 @@ namespace Voxels
 {
     public unsafe static class MeshUtils
     {
-        public static void AllocateMeshData(Mesh* mesh, int triangleCount)
-        {
-            mesh->vertexCount = triangleCount * 3;
-            mesh->triangleCount = triangleCount;
 
-            mesh->vertices =  (float*)  NativeMemory.Alloc((nuint)(mesh->vertexCount * 3 * sizeof(float)));
-            mesh->texcoords = (float*)  NativeMemory.Alloc((nuint)(mesh->vertexCount * 2 * sizeof(float)));
-            mesh->normals =   (float*)  NativeMemory.Alloc((nuint)(mesh->vertexCount * 3 * sizeof(float)));
-            mesh->indices =   (ushort*) NativeMemory.Alloc((nuint)(mesh->vertexCount * sizeof(ushort)));
+        public static void AllocateMeshData(Mesh* mesh, int vertexComponentCount, int texcoordComponentCount)
+        {
+            mesh->vertexCount = vertexComponentCount / 3;
+            mesh->triangleCount = mesh->vertexCount / 3;
+
+            mesh->vertices =  (float*) NativeMemory.Alloc((nuint)(vertexComponentCount * sizeof(float)));
+            mesh->texcoords = (float*) NativeMemory.Alloc((nuint)(texcoordComponentCount * sizeof(float)));
         }
 
-        public static void AddFVec(List<float> list, Vector3 position)
+        public static void AddFVec3(List<float> list, Vector3 vec)
         {
-            list.Add(position.X);
-            list.Add(position.Y);
-            list.Add(position.Z);
+            list.Add(vec.X);
+            list.Add(vec.Y);
+            list.Add(vec.Z);
         }
 
-        public static void AddUVec(List<ushort> list, ushort x, ushort y, ushort z)
+        public static void AddFVec2(List<float> list, Vector2 vec)
         {
-            list.Add(x);
-            list.Add(y);
-            list.Add(z);
+            list.Add(vec.X);
+            list.Add(vec.Y);
         }
 
-        public static void AddTexCoord(List<float> list, float x, float y)
-        {
-            list.Add(x);
-            list.Add(y);
-        }
-
-        public static Mesh MeshFromLists(List<float> vertices, List<ushort> indices, List<float> texcoords)
+        public static Mesh MeshFromLists(List<float> vertexComponents, List<float> texcoordComponents)
         {
             Mesh mesh = new Mesh();
-            AllocateMeshData(&mesh, indices.Count / 3);
+            AllocateMeshData(&mesh, vertexComponents.Count, texcoordComponents.Count);
 
-            fixed (float* verticesPtr = vertices.ToArray())
+            fixed (float* verticesPtr = vertexComponents.ToArray())
             {
                 mesh.vertices = verticesPtr;
             }
 
-            fixed (ushort* indicesPtr = indices.ToArray())
-            {
-                mesh.indices = indicesPtr;
-            }
-
-            fixed (float* texcoordsPtr = texcoords.ToArray())
+            fixed (float* texcoordsPtr = texcoordComponents.ToArray())
             {
                 mesh.texcoords = texcoordsPtr;
             }

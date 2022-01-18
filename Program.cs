@@ -13,10 +13,16 @@ namespace Voxels
             Camera3D cam = new Camera3D(new(5f, 0.25f, 5f), new(0f, 0f, 0f), new (0f, 1f, 0f), 45f, 0f);
             Raylib.SetCameraMode(cam, CameraMode.CAMERA_FIRST_PERSON);
 
-            ChunkMesh chunkMesh = new ChunkMesh();
-            chunkMesh.UpdateMesh();
-            Model chunkModel = Raylib.LoadModelFromMesh(chunkMesh.mesh);
+            ChunkRenderer chunkRenderer = new ChunkRenderer();
+            chunkRenderer.UpdateMesh();
+            Model chunkModel = Raylib.LoadModelFromMesh(chunkRenderer.mesh);
             chunkModel.materials[0].maps[(int)Raylib.MATERIAL_MAP_DIFFUSE].texture = templateTexture;
+
+            List<Image> imageList = new();
+            imageList.Add(Raylib.LoadImage("assets/TemplateBlock.png"));
+            imageList.Add(Raylib.LoadImage("assets/TestBlock.png"));
+            Image atlasImage = TextureAtlas.MakeAtlas(imageList, 2);
+            Texture atlasTex = Raylib.LoadTextureFromImage(atlasImage);
 
             while (!Raylib.WindowShouldClose())
             {
@@ -40,6 +46,8 @@ namespace Voxels
                 Raylib.DrawGrid(10, 1.0);
 
                 Raylib.EndMode3D();
+
+                Raylib.DrawTexture(atlasTex, 10, 10, Raylib.WHITE);
 
                 Raylib.DrawFPS(10, 10);
 
