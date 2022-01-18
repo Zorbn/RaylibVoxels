@@ -49,12 +49,12 @@ namespace Voxels
 
         public void GenCube(int x, int y, int z)
         {
-            GenFaceIfNecessary(x, y, z, Direction.XPos);
-            GenFaceIfNecessary(x, y, z, Direction.XNeg);
-            GenFaceIfNecessary(x, y, z, Direction.YPos);
-            GenFaceIfNecessary(x, y, z, Direction.YNeg);
-            GenFaceIfNecessary(x, y, z, Direction.ZPos);
-            GenFaceIfNecessary(x, y, z, Direction.ZNeg);
+            GenFaceIfNecessary(x, y, z, Direction.Axis.XPos);
+            GenFaceIfNecessary(x, y, z, Direction.Axis.XNeg);
+            GenFaceIfNecessary(x, y, z, Direction.Axis.YPos);
+            GenFaceIfNecessary(x, y, z, Direction.Axis.YNeg);
+            GenFaceIfNecessary(x, y, z, Direction.Axis.ZPos);
+            GenFaceIfNecessary(x, y, z, Direction.Axis.ZNeg);
         }
 
         private int GetBlock(int x, int y, int z)
@@ -66,39 +66,20 @@ namespace Voxels
             return blocks[x, y, z];
         }
 
-        private void GenFaceIfNecessary(int x, int y, int z, Direction direction)
+        private void GenFaceIfNecessary(int x, int y, int z, Direction.Axis direction)
         {
-            switch(direction)
-            {
-                case Direction.XPos:
-                    if (GetBlock(x + 1, y, z) != 0) return;
-                    break;
-                
-                case Direction.XNeg:
-                    if (GetBlock(x - 1, y, z) != 0) return;
-                    break;
-
-                case Direction.YPos:
-                    if (GetBlock(x, y + 1, z) != 0) return;
-                    break;
-
-                case Direction.YNeg:
-                    if (GetBlock(x, y - 1, z) != 0) return;
-                    break;
-
-                case Direction.ZPos:
-                    if (GetBlock(x, y, z + 1) != 0) return;
-                    break;
-
-                case Direction.ZNeg:
-                    if (GetBlock(x, y, z - 1) != 0) return;
-                    break;
-            }
-
+            Vector3 offset = Direction.AxisToVec(direction);
+            
+            if (GetBlock(
+                x + (int) offset.X,
+                y + (int) offset.Y,
+                z + (int) offset.Z) != 0) 
+                return;
+        
             GenFace(x, y, z, direction);
         }
 
-        private void GenFace(int x, int y, int z, Direction direction)
+        private void GenFace(int x, int y, int z, Direction.Axis direction)
         {
             Vector3 position = new(x, y, z);
 
@@ -107,107 +88,6 @@ namespace Voxels
                 MeshUtils.AddFVec3(vertexComponents, position + CubeMesh.FaceVertices[direction][i]);
                 MeshUtils.AddFVec2(texcoordComponents, CubeMesh.FaceTexCoords[direction][i]);
             }
-
-            /*
-            switch(direction)
-            {
-                case Direction.XPos:
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y,      z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y,      z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y,      z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z));
-
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit,      2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit,  vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit,      vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit,      2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit,  2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit,  vfUnit);
-                    break;
-                
-                case Direction.XNeg:
-                    MeshUtils.AddFVec(vertexComponents, new(x, y,      z));
-                    MeshUtils.AddFVec(vertexComponents, new(x, y + 1f, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x, y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x, y,      z));
-                    MeshUtils.AddFVec(vertexComponents, new(x, y,      z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x, y + 1f, z + 1f));
-
-                    MeshUtils.AddTexCoord(texcoordComponents, 0,      2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 0,      vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 0,      2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, 2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, vfUnit);
-                    break;
-
-                case Direction.YPos:
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y + 1f, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y + 1f, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z + 1f));
-
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, vfUnit);
-                    break;
-                
-                case Direction.YNeg:
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y, z + 1f));
-
-                    MeshUtils.AddTexCoord(texcoordComponents, 0, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, 0, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, 0, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, hfUnit, vfUnit);
-                    break;
-                
-                case Direction.ZPos:
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y,      z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y + 1f, z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y,      z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y,      z + 1f));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z + 1f));
-
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 3 * hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, 0);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 3 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 3 * hfUnit, 0);
-                    break;
-                
-                case Direction.ZNeg:
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y,      z));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y + 1f, z));
-                    MeshUtils.AddFVec(vertexComponents, new(x + 1f, y,      z));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y,      z));
-                    MeshUtils.AddFVec(vertexComponents, new(x,      y + 1f, z));
-
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, 2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 3 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 2 * hfUnit, 2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 3 * hfUnit, 2 * vfUnit);
-                    MeshUtils.AddTexCoord(texcoordComponents, 3 * hfUnit, vfUnit);
-                    break;
-            }
-            */
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Voxels
         public const float vfUnit = 0.5f;
         public const float hfUnit = 0.33f;
 
-        public static readonly Dictionary<Direction, Vector3[]> FaceVertices = new()
+        public static readonly Dictionary<Direction.Axis, Vector3[]> FaceVertices = new()
         {
             {
-                Direction.XPos,
+                Direction.Axis.XPos,
                 new Vector3[] {
                     new(1f, 0f, 1f),
                     new(1f, 1f, 0f),
@@ -22,7 +22,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.XNeg,
+                Direction.Axis.XNeg,
                 new Vector3[] {
                     new(0f, 0f, 0f),
                     new(0f, 1f, 1f),
@@ -33,7 +33,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.YPos,
+                Direction.Axis.YPos,
                 new Vector3[] {
                     new(0f, 1f, 0f),
                     new(0f, 1f, 1f),
@@ -44,7 +44,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.YNeg,
+                Direction.Axis.YNeg,
                 new Vector3[] {
                     new(0f, 0f, 0f),
                     new(1f, 0f, 0f),
@@ -55,7 +55,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.ZPos,
+                Direction.Axis.ZPos,
                 new Vector3[] {
                     new(0f, 0f, 1f),
                     new(1f, 1f, 1f),
@@ -66,7 +66,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.ZNeg,
+                Direction.Axis.ZNeg,
                 new Vector3[] {
                     new(1f, 0f, 0f),
                     new(0f, 1f, 0f),
@@ -78,10 +78,10 @@ namespace Voxels
             },
         };
 
-        public static readonly Dictionary<Direction, Vector2[]> FaceTexCoords = new()
+        public static readonly Dictionary<Direction.Axis, Vector2[]> FaceTexCoords = new()
         {
             {
-                Direction.XPos,
+                Direction.Axis.XPos,
                 new Vector2[] {
                     new(hfUnit,     2 * vfUnit),
                     new(2 * hfUnit, vfUnit),
@@ -92,7 +92,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.XNeg,
+                Direction.Axis.XNeg,
                 new Vector2[] {
                     new(0,      2 * vfUnit),
                     new(hfUnit, vfUnit),
@@ -103,7 +103,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.YPos,
+                Direction.Axis.YPos,
                 new Vector2[] {
                     new(2 * hfUnit, 0),
                     new(hfUnit,     0),
@@ -114,7 +114,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.YNeg,
+                Direction.Axis.YNeg,
                 new Vector2[] {
                     new(0,      0),
                     new(0,      vfUnit),
@@ -125,7 +125,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.ZPos,
+                Direction.Axis.ZPos,
                 new Vector2[] {
                     new(2 * hfUnit, vfUnit),
                     new(3 * hfUnit, 0),
@@ -136,7 +136,7 @@ namespace Voxels
                 }
             },
             {
-                Direction.ZNeg,
+                Direction.Axis.ZNeg,
                 new Vector2[] {
                     new(2 * hfUnit, 2 * vfUnit),
                     new(3 * hfUnit, vfUnit),
